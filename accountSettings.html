@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FireStorm | Account Settings</title>
+
+        <link rel="icon" href="design_files/images/circle.png" sizes="32x32">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>        
+
+        <meta name="google-signin-client_id" content="873429309448-p2aujvjnfkne45haiickm7bapk9okq0u.apps.googleusercontent.com">
+            
+        <!-- MATERIAL DESIGN ICONIC FONT -->
+        <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+                
+            <!-- STYLE CSS -->
+        <link rel="stylesheet" href="design_files/css/style.css">
+
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-storage.js"></script>
+
+    </head>
+
+    <body>
+        <!--Background-->
+        <div class="wrapper" style="background-image: url('design_files/images/accountSettingsback.jpg')">
+            <!--White Box-->
+            <div class="inner" style="box-shadow: 0px 4px 4px 0px rgba(0, 118, 228, 0.2), 0px 3px 3px 0px rgba(0, 91, 177, 0.247);">
+                <div class="image-holder">
+                    <!--Image Inside Box-->
+                    <img src="design_files/images/asettings.jpg" alt="Background">
+                </div>
+                
+                <!--Form-->
+                <form action="">
+                    <h3><img src="design_files/images/circle.png" height="28px" width="28px" alt="Brand" hspace="5px" style="margin-bottom: 5px">Account Settings</h3>
+
+                    <div class="form-group">
+                        <input id="firstName" type="text" placeholder="First Name" class="form-control">
+                        <input id="secondName" type="text" placeholder="Second Name" class="form-control">
+                    </div>
+
+                    <!--Dropdown-->
+                    <div class="form-wrapper">
+                        <select name="" id="country" class="form-control">
+                            <option value="" disabled selected >Country</option>
+                            <option value="India">India</option>
+                            <option value="United States Of America">United States Of America</option>
+                            <option value="United Arab Emirates">United Arab Emirates</option>
+                            <option value="Canada">Canada</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="England">England</option>
+                        </select>
+                        <i class="zmdi zmdi-caret-down" style="font-size: 20px; margin-right: 1%"></i>
+                    </div>
+        
+                    <div class="form-wrapper">
+                        <input id="phone" type="number" placeholder="Phone" class="form-control">
+                        <i class="zmdi zmdi-tablet-mac" style="margin-right: 1%"></i>
+                    </div>
+
+                    <!--Dropdown-->
+                    <div class="form-wrapper">
+                        <select name="" id="gender" class="form-control">
+                            <option value="" disabled selected >Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Others">Others</option>
+                        </select>
+                        <i class="zmdi zmdi-caret-down" style="font-size: 20px; margin-right: 1%;"></i>
+                    </div>
+
+                    <div class="form-wrapper">
+                        <input id="address" type="text" placeholder="Address" class="form-control">
+                        <i class="zmdi zmdi-pin" style="margin-right: 1%"></i>
+                    </div>
+                    <div class="form-wrapper">
+                        <input id="bio" type="text" placeholder="Bio" class="form-control">
+                        <i class="zmdi zmdi-account-box-mail" style="margin-right: 1%"></i>
+                    </div>
+        
+                    <!--Button Update-->
+                    <div class="form-group container-login100-form-btn">
+                        <button id="btn-update" type="button">
+                            Update
+                            <i class="zmdi zmdi-arrow-right"></i>
+                        </button>
+                    </div>
+        
+                </form>
+                
+            </div>
+
+        </div>
+        
+          <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
+          <script src="js/index.js"></script>
+        <script>
+            firebase.auth().onAuthStateChanged(function(user){
+                if(user){
+                    var userID = firebase.auth().currentUser.uid;
+
+                    firebase.database().ref('Users/' + userID).once('value').then(function(snapshot){
+                        if(snapshot.val()){
+                            window.location.href = "index.html";
+                        }
+                    });
+                }
+                else {
+                    window.open("signin.html","_self");
+                }
+            });
+        </script>
+        
+    </body>
+</html>

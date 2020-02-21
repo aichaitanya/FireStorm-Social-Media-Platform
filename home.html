@@ -1,0 +1,300 @@
+<!---------------Blog Post Area ------- -->
+<div class="jumbotron" style="background-color:silver; color: #4885ed;">
+        <script>
+            var counter = 0;
+        </script>
+        <div class="container text-center">
+            <form id="main-form" action="">
+                <!--Description-->
+                <div class="form-group">
+                    <textarea type="text" placeholder="Description ...." rows="5" class="form-control" id="main-desc"></textarea>
+                    <div class="invalid-feedback">
+                        Please write something ....
+                    </div>
+                </div>
+                <!--Error Message-->
+                <div class="form-group">
+                    <input type="file" class="form-control" id="main-image"/>
+                    <div class="invalid-feedback">
+                        Please choose a valid picture ....
+                    </div>
+                </div>
+                <!--Image Showcase Block-->
+                <div class="form-group">
+                    <img id="selected-image" width="250" height="150" src="#" style="object-fit: contain;"/>
+                </div>
+                <!--Progress Bar-->
+                <div class="form-group">
+                    <div class="progress bg-secondary">
+                        <div class="progress-bar bg-success" id="upload-progress" style="width: 0%;">0%</div>
+                    </div>
+                </div>
+                <!--Upload Button-->
+                <div class="form-group">
+                    <button id="save-blog" type="button" style="width: 120px; height: 40px; color: #4885ed;" class="btn">
+                        Post
+                    </button>
+                </div>
+
+            </form>
+
+            <div id="result">
+
+            </div>
+
+        </div>
+    </div>
+    <!-------------------Blog Upload Area End------------------>
+
+    <!-------------------After Blog Upload Area------------------>
+    <hr>
+    <br><br><br>
+    <div class="text-center text-dark" style="background-color: white;">
+        <h3>All New Blogs</h3>
+    </div>
+
+    <hr><br>
+
+    <div class="row-container-fluid bg-3">
+        <div class="col-sm-12" id="blogs">
+
+        </div>
+    </div>
+
+    <br>
+
+    <!-------------------After Blog Area End------------------>
+    
+    <!------------------Validation and uploading of post blogs----------------->
+
+    <script>
+
+        var validImagetypes = ["image/gif", "image/jpeg", "image/png"];
+
+        $("#selected-image").hide(); //Hide image block
+
+        //Pick image and display
+        function previewImage(image_blog){
+            if(image_blog.files && image_blog.files[0]){
+                var reader = new FileReader();
+
+                reader.onload = function(e){
+                    $("#selected-image").attr('src',e.target.result);
+                    $("#selected-image").fadeIn();
+                }
+                reader.readAsDataURL(image_blog.files[0]);
+
+                $("#selected-image").show();
+            }
+        }
+
+        //Display in block
+        $("#main-image").change(function(){
+            previewImage(this);
+        });
+
+
+        //-------Check everything is mentioned or not------------
+        $("#save-blog").click(function(){
+            $("#main-desc").removeClass("is-invalid");
+            $("#main-image").removeClass("is-invalid");
+
+            var desc = $("#main-desc").val();
+            var picture = $("#main-image").prop("files")[0];
+
+            if(!desc){
+                $("#main-desc").addClass("is-invalid");
+                return;
+            }
+            if(picture == null){
+                $("#main-image").addClass("is-invalid");
+                return;
+            }
+
+            if($.inArray(picture["type"],validImagetypes)<0){
+                $("#main-image").addClass("is-invalid");
+                return;
+            }
+
+            //----------------Upload and Save to Firebase---------------
+
+            var databaseRef = firebase.database().ref().child("Blogs"); //New Root in Database
+
+            databaseRef.once("value").then(function(snapshot){
+
+                //Uploaded image file name on Storage
+                var name = picture["name"];
+                var dateStr = new Date().getTime();
+                var fileCompleteName = name + "_" + dateStr; //file name inside Firebase
+
+                //Storage Reference
+                var storageRef = firebase.storage().ref("Blog Images");
+                var blogStorageRef = storageRef.child(fileCompleteName); //Child of Storage Root
+
+                var uploadTask = blogStorageRef.put(picture); //Upload inside Folder
+
+                uploadTask.on("state_changed",
+
+                    function progress(snapshot){
+                        //Progress bar
+                        var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        $("#upload-progress").html(Math.round(percentage)+"%");
+                        $("#upload-progress").attr("style","width:"+percentage+"%");
+                        console.log("Status : Uploading");
+                    },
+
+                    function error(err){
+                        console.log("Error : "+err);
+                    },
+
+                    function complete(){
+                        //Current User
+                        var user = firebase.auth().currentUser;
+                        var userName;
+
+                        //Get uid
+                        firebase.database().ref('Users/' + user.uid).once('value').then(function(snapshot){
+                            var fName = (snapshot.val() && snapshot.val().firstName);
+                            var sName = (snapshot.val() && snapshot.val().secondName);
+
+                            userName = fName + " " + sName;
+                        });
+
+                        //----------------------Get image url to put in Database------------------
+                        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadUrl){
+                            var time = new Date();
+
+                            //Date format
+                            var options = {
+                                weekday : "long",
+                                month : "long",
+                                day : "2-digit",
+                                year : "numeric",
+                            };
+
+                            if(user.photoURL != null){
+                                var blogData = {
+                                    "image": downloadUrl,
+                                    "name": fileCompleteName,
+                                    "desc": desc,
+                                    "uid": user.uid,
+                                    "profile" : user.photoURL,
+                                    "counter": 5000 - counter,
+                                    "username": userName,
+                                    "time": time.toLocaleString('en-US', {hour: 'numeric' , minute : 'numeric' , hour12: true}),
+                                    "date": time.toDateString('en-US', options),
+                                };
+                            }
+                            else {
+                                var blogData = {
+                                    "image": downloadUrl,
+                                    "name": fileCompleteName,
+                                    "desc": desc,
+                                    "uid": user.uid,
+                                    "profile" : "https://firebasestorage.googleapis.com/v0/b/firestorm-f6930.appspot.com/o/Default%20Profile%2Fprofile.png?alt=media&token=4b1a5214-2c31-4787-a7b2-8ea45edd745d",
+                                    "counter": 5000 - counter,
+                                    "username": userName,
+                                    "time": time.toLocaleString('en-US', {hour: 'numeric' , minute : 'numeric' , hour12: true}),
+                                    "date": time.toDateString('en-US', options),
+                                };
+                            }
+
+                            //Database structure
+                            
+
+                            //Put Data in Database
+                            var newPostRef = databaseRef.push();
+
+                            //Uploading....
+                            newPostRef.set(blogData, function(err){
+                                if(err){
+                                    $("#result").attr("class", "alert alert-danger");
+                                    $("#result").html(err.message);
+                                    console.log("Error : "+err);
+                                }
+                                else {
+                                    //Upload Done
+                                    $("#result").attr("class", "alert alert-success");
+                                    $("#result").html("Post uploaded successfully");
+
+                                    window.open("", "_self");
+                                    console.log("Status : Uploaded Successfully");
+                                }
+
+                                resetForm();
+                            });
+                        });
+                    }
+                );
+            });
+
+            //----------------Upload and Save to Firebase End---------------
+
+        });
+
+        function resetForm(){
+            $("#main-form")[0].reset();
+            $("#selected-image").fadeOut();
+            $("#upload-progress").html("Completed");             
+        }
+
+        // Retrieve & Display Data ....
+
+        var dbBlogs = firebase.database().ref().child("Blogs").orderByChild("counter");
+
+        dbBlogs.on("value", function(blogs){
+
+            if(blogs.exists()){
+                var blogsHtml = "";
+
+                blogs.forEach(function(singleBlog){
+
+                    console.log(singleBlog.val().uid);
+
+                    var userRef = firebase.database().ref().child("Users").child(singleBlog.val().uid).child("photo");
+
+                    console.log(userRef);
+
+                    counter = counter + 1;
+
+                    blogsHtml += "<center><div class='jumbotron text-dark border border-light' style='background-color:white;height:fit-content; padding:20px; width:700px;px-webkit-box-shadow:0px 0px 5px 6px #ccc; -moz-box-shadow:0px 0px 5px 6px #ccc; box-shadow:0px 0px 5px 6px #ccc;'>";
+                        
+                        blogsHtml += "<div class='row'>";
+
+                        blogsHtml += "<div class='col-sm-6' align='left'> <p style='align:left; color:2d2d2d; font-weight: 600;'>"
+                                    + "<img src='"+ singleBlog.val().profile +"' id='userIMG' style='height:30px; width:30px; border-radius:50%;margin-right:7px;'>" + singleBlog.val().username
+                                    + "</p> </div>";
+
+                        blogsHtml += "</div><br>";
+
+                        blogsHtml += "<div align='center'> <img width='450px' height='280px' style='object-fit: cover;' src='";
+                            blogsHtml += singleBlog.val().image;                                            
+                        blogsHtml += "' /></div><br>";
+
+                        blogsHtml += "<div class='row'>";
+
+                            blogsHtml +="<div class='col-sm-4' align='left' style='margin-left:14px'> <p style='color:grey; margin-right: 0px;align:right; font-size:14px'>"
+                                        + singleBlog.val().time + " " + singleBlog.val().date
+                                        + "</p> </div>"; 
+
+                        blogsHtml += "</div>";
+
+                        blogsHtml += "<div style='text-align: justify; color: #2e2e2e; margin-right:15px;  word-wrap: break-word;margin-left: 15px; font-weight: 550;'>";
+                            blogsHtml += singleBlog.val().desc;                                            
+                        blogsHtml += "</div><br>";
+
+                        // Like Button
+
+                    blogsHtml += "</div></center>";
+
+                });
+                
+                $("#blogs").html(blogsHtml);
+
+            }
+        });
+
+        // Retrieve & Display Data End ....
+    </script>
+
+    <!------------------Validation and uploading of post  blogs End----------------->

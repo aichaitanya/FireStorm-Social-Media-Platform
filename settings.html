@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FireStorm | Settings</title>
+
+        <link rel="icon" href="design_files/images/circle.png" sizes="32x32">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>        
+
+        <meta name="google-signin-client_id" content="873429309448-p2aujvjnfkne45haiickm7bapk9okq0u.apps.googleusercontent.com">
+            
+        <!-- MATERIAL DESIGN ICONIC FONT -->
+        <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+                
+            <!-- STYLE CSS -->
+        <link rel="stylesheet" href="design_files/css/style.css">
+
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-storage.js"></script>
+
+
+        <script>
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyArlCXi0yPqRMAYR-Rh2mnnGnOWZTUTlIo",
+                authDomain: "firestorm-f6930.firebaseapp.com",
+                databaseURL: "https://firestorm-f6930.firebaseio.com",
+                projectId: "firestorm-f6930",
+                storageBucket: "firestorm-f6930.appspot.com",
+                messagingSenderId: "336000827720",
+                appId: "1:336000827720:web:ec07f6bb87f67293"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+
+            
+            firebase.auth().onAuthStateChanged(function(user){
+                if(user){
+                    var userID = firebase.auth().currentUser.uid;
+
+                    var dbRef = firebase.database().ref().child("Users").child(userID);
+
+                    if(user.photoURL != null){
+                        document.getElementById('userImg').src = user.photoURL;
+                    }
+
+                    dbRef.on("value", function(snapshot) {
+                        console.log(snapshot.val().firstName+" "+snapshot.val().secondName+" "+userID+" "+snapshot.val().country);
+
+                        document.getElementById('firstName').value = snapshot.val().firstName;
+                        document.getElementById('secondName').value = snapshot.val().secondName;
+                        document.getElementById('country').value = snapshot.val().country;
+                        document.getElementById('phone').value = snapshot.val().phone;
+                        document.getElementById('gender').value = snapshot.val().gender;
+                        document.getElementById('address').value = snapshot.val().address;
+                        document.getElementById('bio').value = snapshot.val().bio;
+
+                    }, function (error) {
+                        console.log("Error: " + error.code);
+                    });
+
+                    $("#update").click(function(){
+
+                        var phone = $("#phone").val();
+                        var address = $("#address").val();
+                        var bio = $("#bio").val();
+                        var fName = $("#firstName").val();
+                        var sName = $("#secondName").val();
+                        var country = $("#country").val();
+                        var gender = $("#gender").val();
+
+                        if(fName!="" && sName!="" && phone!="" && country!="" && gender!="" && bio!="" && address!="") {
+                            var updates = {
+                                "phone" : phone,
+                                "address" : address,
+                                "bio" : bio,
+                                "firstName" : fName,
+                                "secondName" : sName,
+                                "country" : country,
+                                "gender" : gender,
+                            };
+                            
+                            dbRef.update(updates);
+
+                            window.alert("Profile Updated ....");
+
+                            window.location.href = "index.html";
+                        }
+                        else {
+                            window.alert("Please enter required Fields ...");
+                        }
+                    });
+
+                    $("#abort").click(function(){
+                        window.location.href = "index.html";
+                    });
+
+                }
+            });
+            
+        </script>
+
+    </head>
+
+    <body>
+        <!--Background-->
+        <div class="wrapper" style="background-image: url('design_files/images/accountSettingsback.jpg')">
+            <!--White Box-->
+            <div class="inner" style="box-shadow: 0px 4px 4px 0px rgba(0, 118, 228, 0.2), 0px 3px 3px 0px rgba(0, 91, 177, 0.247);">
+                <div class="">
+                    <!--Image Inside Box-->
+                    <img src="design_files/images/profile.png" id="userImg" alt="Background" style="border-radius: 50%; height:200px; width: 200px; margin-left: 30px;margin-top: 30px">
+                </div>
+                
+                <!--Form-->
+                <form action="">
+                    <h3><img src="design_files/images/circle.png" height="28px" width="28px" alt="Brand" hspace="5px" style="margin-bottom: 5px">Profile</h3>
+
+                    <div class="form-group">
+                        <input id="firstName" type="text" placeholder="First Name" class="form-control">
+                        <input id="secondName" type="text" placeholder="Second Name" class="form-control">
+                    </div>
+
+                    <!--Dropdown-->
+                    <div class="form-wrapper">
+                        <select name="" id="country" class="form-control">
+                            <option value="" disabled selected >Country</option>
+                            <option value="India">India</option>
+                            <option value="United States Of America">United States Of America</option>
+                            <option value="United Arab Emirates">United Arab Emirates</option>
+                            <option value="Canada">Canada</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="England">England</option>
+                        </select>
+                        <i class="zmdi zmdi-caret-down" style="font-size: 20px; margin-right: 1%"></i>
+                    </div>
+        
+                    <div class="form-wrapper">
+                        <input id="phone" type="number" placeholder="Phone" class="form-control">
+                        <i class="zmdi zmdi-tablet-mac" style="margin-right: 1%"></i>
+                    </div>
+
+                    <!--Dropdown-->
+                    <div class="form-wrapper">
+                        <select name="" id="gender" class="form-control">
+                            <option value="" disabled selected >Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Others">Others</option>
+                        </select>
+                        <i class="zmdi zmdi-caret-down" style="font-size: 20px; margin-right: 1%;"></i>
+                    </div>
+
+                    <div class="form-wrapper">
+                        <input id="address" type="text" placeholder="Address" class="form-control">
+                        <i class="zmdi zmdi-pin" style="margin-right: 1%"></i>
+                    </div>
+                    <div class="form-wrapper">
+                        <input id="bio" type="text" placeholder="Bio" class="form-control">
+                        <i class="zmdi zmdi-account-box-mail" style="margin-right: 1%"></i>
+                    </div>
+        
+                    <!--Button Update-->
+                    <div class="form-group container-login100-form-btn" style="margin-top: 1%">
+                        <button id="update" type="button">
+                            Update
+                            <i class="zmdi zmdi-arrow-right"></i>
+                            <button id="abort" type="button">
+                                Abort
+                                <i class="zmdi zmdi-arrow-right"></i>
+                            </button>
+                        </button>
+                    </div>
+        
+                </form>
+                
+            </div>
+
+        </div>
+        
+          <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
+          <script src="js/index.js"></script>
+        
+    </body>
+</html>

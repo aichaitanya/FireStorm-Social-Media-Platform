@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FireStorm | Connect To World Of Pixels ....</title>
+
+        <meta name="google-site-verification" content="pJRl-Ipm0MKo045NfDNVEUbJm5fzzZ6rrURKqJOePRw" />
+
+        <link rel="icon" href="design_files/images/circle.png" sizes="32x32">        
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>        
+        <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-storage.js"></script>
+
+        <style>
+        .dropdown-left-manual {
+            right: 0;
+            left: auto;
+            padding-left: 1px;
+            padding-right: 1px;
+        }
+        </style>
+
+        <script>
+            function signout(){
+                firebase.auth().signOut();
+                console.log("signed Out");
+            }
+        </script>
+
+        <script>
+            function settings(){
+                window.open('settings.html','_self');
+            }
+
+        </script>
+
+    </head>
+
+    <body class="h-100" style="padding-top: 4%; background-color: ">
+        <!--Navbar Initialize-->
+        <nav class="navbar fixed-top navbar-expand text-white" style="height: 50px; background-color:#f1f1f1; box-shadow: 3px 1px 3px grey;">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a class="navbar-brand" style="color: #2e2e2e; text-decoration-style: wavy;" href="#">
+                            <img src="design_files/images/circle.png" height="30px" width="30px" alt="Brand" hspace="5px" style="margin-bottom: 5px; margin-right: 10px">FireStorm
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link active" style="color: #2e2e2e; text-decoration-style: wavy;" onclick="switchView('home.html')">
+                            <i class='fas fa-home' id="home"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" style="color: #2e2e2e; text-decoration-style: wavy;" onclick="switchView('myblogs.html')">
+                            <i class="material-icons" style="font-size: 23px" id="people">person</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" style="color: #2e2e2e; text-decoration-style: wavy;" onclick="switchView('users.html')">
+                            <i class="material-icons" id="users">people</i>
+                        </a>
+                    </li>
+                </ul>
+                
+                <a href="#" title="Header" data-toggle="popover" data-placement="bottom" data-content="Hello" style="margin-left: auto;" >
+                    <img src="design_files/images/profile.png" class="" id="profileImg" height="30px" width="30px" hspace="7px" style="margin-bottom: 3px;border-radius: 50%;margin-left: auto;">
+                </a>
+                
+                <h6 id="profileName" style="color: #2e2e2e; margin-bottom: 3px; width: fit-content; margin-right:5px;"></h6>
+
+                <!--Dropdown Menu-->
+                <div class="dropdown navbar-right">
+
+                    <button class="btn btn-light dropdown-toggle text-grey" type="button" data-toggle="dropdown" 
+                    aria-expanded="false" aria-haspopup="true" id="option-id" style="background-color: #f1f1f1; border:none">
+                    </button>
+
+                    <div class="dropdown-menu dropdown-left-manual" aria-labelledby="option-id">
+                        <a class="dropdown-item" id="btn-settings" href="#" onclick="settings()" >
+                            <i class='fas fa-user-cog' style="margin-right: 2px;"></i>
+                            Settings
+                        </a>
+                        <a class="dropdown-item" id="btn-logout" href="#" onclick="signout()">
+                            <i class='fas fa-key' style="margin-right: 5px;"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+
+        <!--Below navbar Post Upload Section-->
+        <div class="row h-100" style="background-color: white;">
+            <div class="col-lg-0 bg-secondary" style="background-color: white">
+                <ul class="nav flex-column">
+
+                </ul>
+            </div>
+
+            <div class="col-lg-12" style="background-color: white;">
+                <div class="container" id="container">
+                    
+                </div>
+            </div>
+        </div>
+
+        <footer style="text-align: center; width:100%; height:fit-content;padding: 10px; background-color:whitesmoke; color: grey;">
+            &copy; CopyRights To FireStorm - All Rights Reserved.
+        </footer>
+        
+        <script src="js/index.js"></script>
+        <script>
+            firebase.auth().onAuthStateChanged(function(user){
+                console.log(user);
+                if(!user){
+                    window.location.href = "signin.html";
+                }
+
+                var userID = firebase.auth().currentUser.uid;
+                var dbRef = firebase.database().ref().child("Users").child(userID);
+                var photoref = dbRef.child("photo");
+
+                
+
+                if(user.photoURL == null){
+
+                    var profile = {
+                        "photoUrl": "https://firebasestorage.googleapis.com/v0/b/firestorm-f6930.appspot.com/o/Default%20Profile%2Fprofile.png?alt=media&token=4b1a5214-2c31-4787-a7b2-8ea45edd745d",
+                    };
+                    console.log("NUll");
+                }
+                else {
+                    var profile = {
+                        "photoUrl": user.photoURL,
+                    };
+
+                    console.log(user.photoURL);
+                }
+
+                console.log(user.photoURL);
+
+                photoref.set(profile,function(error){
+                    if(error){
+                        console.log("Error :" +error);
+                    }
+                });
+
+                dbRef.on("value", function(snapshot) {
+
+                    document.getElementById('profileName').innerHTML = snapshot.val().firstName + " " + snapshot.val().secondName;
+
+                }, function (error) {
+                    console.log("Error: " + error.code);
+                });
+
+                if(user.photoURL != null){
+                    document.getElementById('profileImg').src = user.photoURL;
+                }
+                
+            });
+        </script>
+
+        
+        <script>
+            $(document).ready(function(){
+                $('[data-toggle="popover"]').popover();
+            });
+        </script>
+
+
+    </body>
+</html>

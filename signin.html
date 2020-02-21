@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FireStorm | Login</title>
+
+        <link rel="icon" href="design_files/images/circle.png" sizes="32x32">        
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>        
+
+        <!-- MATERIAL DESIGN ICONIC FONT -->
+        <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+                
+            <!-- STYLE CSS -->
+        <link rel="stylesheet" href="design_files/css/style.css">
+
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-storage.js"></script>
+        
+        <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <meta name="google-signin-client_id" content="336000827720-c4m0sihp32hpr7hna4fl0rtcofkgkkhv.apps.googleusercontent.com">
+
+        <script>
+            function msft(){
+                var provider = new firebase.auth.OAuthProvider('microsoft.com');
+    
+                firebase.auth().signInWithPopup(provider)
+                .then(function(result) {
+                    console.log("Success");                        
+                })
+                .catch(function(error) {
+                    console.log("Error : "+error);
+                });
+            }
+        </script>
+
+        <script>    
+            function gth(){
+                var provider = new firebase.auth.GithubAuthProvider();
+
+                firebase.auth().signInWithPopup(provider)
+                .then(function(result) {
+                    console.log("Success");                        
+                })
+                .catch(function(error) {
+                    console.log("Error : "+error);
+                });
+            }
+        </script>
+
+        <script>
+            function googleSignIn() {
+                var base_provider = new firebase.auth.GoogleAuthProvider();
+
+                firebase.auth().signInWithPopup(base_provider).then(function(result){
+                    console.log("Success");
+                }).catch(function(err){
+                    console.log("Failed"+err);
+                });
+            }
+        </script>
+
+        <script>
+            // Password Visibility
+            function visibilityTest_1() {
+                var x = document.getElementById("password");
+                var y = document.getElementById("visible");
+
+                y.classList.toggle("fa-eye-slash");
+                if (x.type === "password") {
+                    x.type = "text";
+                } else {
+                    x.type = "password";
+                }
+                }
+        </script>
+
+    </head>
+
+    <body>
+        <div class="wrapper" style="background-image: url('design_files/images/loginback.jpg')">
+
+            <!--White Box-->
+            <div class="inner" style="box-shadow: 0px 4px 4px 0px rgba(0, 118, 228, 0.2), 0px 3px 3px 0px rgba(0, 91, 177, 0.247);">
+                <div class="image-holder">
+                    <!--White Box Image-->
+                    <img src="design_files/images/signin.png" alt="Background">
+                </div>
+                
+                <form action="">
+                    <!--Form Inputs-->
+                    <h3><img src="design_files/images/circle.png" height="28px" width="28px" alt="Brand" hspace="5px" style="margin-bottom: 5px">Login</h3>
+                    <div class="form-wrapper">
+                        <input id="email" type="email" placeholder="Email ID" class="form-control">
+                        <i class="zmdi zmdi-email" style="margin-right: 1%"></i>
+                    </div>
+        
+                    <div class="form-wrapper">
+                        <input id="password" type="password" placeholder="Password" class="form-control">
+                        <i class="zmdi zmdi-lock" style="margin-right: 8%"></i>
+                        <i class="fas fa-eye" id="visible" style="margin-right: 1%"  onclick="visibilityTest_1()"></i>
+                    </div>
+        
+                    <div class="form-group container-login100-form-btn">
+                        <button id="btn-login" type="button">
+                            Sign In
+                            <i class="zmdi zmdi-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="w-full text-center" style="margin-top: 0%; font-size: 15px;">
+                        <a href="#" class="text-dark">
+                            Or
+                        </a>
+                    </div>
+                    <!--Google Button-->
+                    <div class="form-group container-login100-form-btn">
+                        <button style="background-color: transparent;height: 20px; width: 100px; margin-top: 3%;border-collapse: collapse;border-block-color: transparent">
+                            <div class="g-signin2" onclick="googleSignIn()"></div>
+                        </button>
+                    </div>
+                    <!--Microsoft Login-->
+                    <div class="form-group container-login100-form-btn">
+                        <button style="padding-right: 16px; margin-top:4%; background-color: white; color: lightslategrey; height: 35px; width: 120px; font-size: 11px; box-shadow: 0px 4px 4px 0px rgba(0, 118, 228, 0.2), 0px 3px 3px 0px rgba(0, 91, 177, 0.247); padding-right: 5px" id="microsoft" type="button" onclick="msft()">
+                            <i class="fab fa-microsoft" style="margin-right:24%; animation: none; color: #4885ed; font-size: 16px;"></i>Microsoft<img hspace="5px"/>
+                        </button>
+                    </div>
+                    <!--GitHub Login-->
+                    <div class="form-group container-login100-form-btn">
+                        <button style="padding-right: 16px; margin-top:0%; background-color: white; color: lightslategrey; height: 35px; width: 120px; font-size: 11px; box-shadow: 0px 4px 4px 0px rgba(0, 118, 228, 0.2), 0px 3px 3px 0px rgba(0, 91, 177, 0.247); padding-right: 5px" id="github" type="button" onclick="gth()">
+                            <i class="fa fa-github" style="margin-right:24%; animation: none; color: #2d2d2d; font-size: 25px;"></i>GitHub<img hspace="10px"/>
+                        </button>
+                    </div>
+                    <!--Phone Auth-->
+                    <div class="form-group container-login100-form-btn">
+                        <button style="margin-top:1%; background-color: white; color: lightslategrey; height: 35px; width: 120px; font-size: 11px; box-shadow: 0px 4px 4px 0px rgba(0, 118, 228, 0.2), 0px 3px 3px 0px rgba(0, 91, 177, 0.247); padding-right: 5px" id="phone-auth" type="button" onclick="window.location.href='phoneauth.html'">
+                            <i class="material-icons" style="margin-right:14%; animation: none; color: #4885ed;">call</i>Phone Auth
+                        </button>
+                    </div>
+
+                    <div class="w-full text-center p-t-27 p-b-239" style="margin-top: 7%; font-size: 15px;">
+                        <span class="text-muted">
+                            Forgot
+                        </span>
+                        <a href="forgetPassword.html" class="text-dark">
+                            user name / password ?
+                        </a>
+                    </div>
+        
+                    <div class="w-full text-center" style="margin-top: 7%; font-size: 15px;">
+                        <a href="signup.html" class="text-dark">
+                            Not have an account ? Sign Up
+                        </a>
+                    </div>
+
+                </form>
+                
+            </div>
+
+        </div>
+
+        
+
+        <script src="js/index.js"></script>
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+        <script>
+            firebase.auth().onAuthStateChanged(function(user){
+                if(user){
+                    var userID = firebase.auth().currentUser.uid;
+
+                    firebase.database().ref('Users/' + userID).once('value').then(function(snapshot){
+                        if(snapshot.val()){
+                            window.location.href = "index.html";
+                        }
+                        else {
+                            window.location.href = "accountSettings.html";
+                        }
+                    });
+                }
+            });
+        </script>
+
+    </body>
+</html>

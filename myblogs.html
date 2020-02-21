@@ -1,0 +1,90 @@
+
+    <!-------------------After Blog Upload Area------------------>
+<br>
+    <div class="text-center text-dark" style="background-color: white;">
+        <h3>My Blogs</h3>
+    </div>
+
+    <hr><br>
+
+    <div class="row-container-fluid bg-3">
+        <div class="col-sm-12" id="blogs">
+
+        </div>
+    </div>
+
+    <br>
+
+    <script>
+        // Retrieve & Display Data ....
+
+        var user = firebase.auth().currentUser;
+
+        var dbBlogs = firebase.database().ref().child("Blogs").orderByChild("uid").equalTo(user.uid);
+
+        dbBlogs.on("value", function(blogs){
+
+            if(blogs.exists()){
+                var blogsHtml = "";
+
+                blogs.forEach(function(singleBlog){
+                    counter = counter + 1;
+
+                    console.log(singleBlog.val().uid);
+
+                    blogsHtml += "<center><div class='jumbotron text-dark border border-light' style='background-color:white;height:fit-content; padding:20px; width:700px;px-webkit-box-shadow:0px 0px 5px 6px #ccc; -moz-box-shadow:0px 0px 5px 6px #ccc; box-shadow:0px 0px 5px 6px #ccc;'>";
+                        
+                        blogsHtml += "<div class='row'>";
+
+                        blogsHtml += "<div class='col-sm-6' align='left'> <p style='align:left; color:2d2d2d; font-weight: 600;'>"
+                                    + "<img src='"+ singleBlog.val().profile +"' id='userIMG' style='height:30px; width:30px; border-radius:50%;margin-right:7px;'>" + singleBlog.val().username
+                                    + "</p> </div>";
+
+                        blogsHtml += "</div><br>";
+
+                        blogsHtml += "<div align='center'> <img width='450px' height='280px' style='object-fit: cover;' src='";
+                            blogsHtml += singleBlog.val().image;                                            
+                        blogsHtml += "' /></div><br>";
+
+                        blogsHtml += "<div class='row'>";
+
+                            blogsHtml +="<div class='col-sm-4' align='left' style='margin-left:14px'> <p style='color:grey; margin-right: 0px;align:right; font-size:14px'>"
+                                        + singleBlog.val().time + " " + singleBlog.val().date
+                                        + "</p> </div>"; 
+
+                        blogsHtml += "</div>";
+
+                        blogsHtml += "<div style='text-align: justify; color: #2e2e2e; margin-left: 15px; margin-right:15px ;font-weight: 550; word-wrap: break-word;'>";
+                            blogsHtml += singleBlog.val().desc;                                            
+                        blogsHtml += "</div><br>";
+                     
+                        blogsHtml += "<div class='form-group' style='text-align: justify; color: #4885ed; margin-left: 10px; margin-right:10px'>";
+                            blogsHtml += "<button class='form-control btn btn-light bg-light test-blue' style='color:#4885ed;' onclick=deleteblogRecord('"+singleBlog.key+"')>Delete</button>"                                            
+                        blogsHtml += "</div>";
+
+                        // Like Button
+
+                    blogsHtml += "</div></center>";
+
+                });
+                
+                $("#blogs").html(blogsHtml);
+
+            }
+        });
+
+        function deleteblogRecord(key){
+            var deleteRef = firebase.database().ref().child("Blogs").child(key);
+
+            return deleteRef.remove()
+            .then(function(){
+                console.log("Deleted Successfully ....");
+            })
+            .catch(function(){
+                console.log("Error");
+            });
+        }
+        // Retrieve & Display Data End ....
+    </script>
+
+    <!------------------Validation and uploading of post  blogs End----------------->

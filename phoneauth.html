@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset=utf-8 />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="design_files/images/circle.png" sizes="32x32">
+  <title>FireStorm | Phone Authentication</title>
+
+  <!-- Material Design Theming -->
+  <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.orange-indigo.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+  <!-- Header section containing title -->
+  <header class="mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
+      <div class="mdl-layout__header-row mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--8-col-desktop" style="height: 15px">
+        <a href="signin.html" style="text-decoration: none;"><h3 style="color: white; text-decoration: none;">
+          <img src="design_files/images/phone.jpg" height="35px" width="35px" alt="Brand" hspace="5px" style="margin-bottom: 5px">FireStorm Phone Authentication</h3></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mdl-layout__content mdl-color--grey-100">
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
+
+      <!-- Container for the demo -->
+      <div id="sign-in-card" class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+        
+        <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+          <p>Sign in with your phone number below.</p>
+
+          <form id="sign-in-form" action="#">
+            <!-- Input to enter the phone number -->
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" pattern="\+[0-9\s\-\(\)]+" id="phone-number">
+              <label class="mdl-textfield__label" for="phone-number">Enter your phone number...</label>
+              <span class="mdl-textfield__error">Input is not an international phone number!</span>
+            </div>
+
+            <!-- Sign-in button -->
+            <button disabled class="mdl-button mdl-js-button mdl-button--raised" id="sign-in-button">Sign-in</button>
+          </form>
+          
+          <form id="verification-code-form" action="#">
+            <!-- Input to enter the verification code -->
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="verification-code">
+              <label class="mdl-textfield__label" for="verification-code">Enter the verification code...</label>
+            </div>
+
+            <!-- Button that triggers code verification -->
+            <input type="submit" class="mdl-button mdl-js-button mdl-button--raised" id="verify-code-button" value="Verify Code"/>
+            <!-- Button to cancel code verification -->
+            <button class="mdl-button mdl-js-button mdl-button--raised" id="cancel-verify-code-button">Cancel</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-storage.js"></script>
+
+<script type="text/javascript" src="js/phoneauth.js"></script>
+
+</body>
+</html>

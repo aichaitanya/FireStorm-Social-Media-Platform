@@ -1,0 +1,53 @@
+
+    <!-------------------After Blog Upload Area------------------>
+    <br>
+    <div class="text-center text-dark" style="background-color: white;">
+        <h3>User Profiles</h3>
+    </div>
+
+    <hr><br>
+
+    <div class="row-container-fluid bg-3">
+        <div class="col-sm-12" id="blogs">
+
+        </div>
+    </div>
+
+    <br>
+
+    <script>
+
+        var dbUsers = firebase.database().ref().child("Users");
+
+        dbUsers.on("value", function(users,dbUsers){
+
+            if(users.exists()){
+                var usersHTML = "";
+            
+                users.forEach(function(singleUser,dbUsers){
+
+                    console.log(singleUser.val().photo.photoUrl);                    
+                    console.log(singleUser.val().firstName);
+
+                        usersHTML += "<div class='row'>";
+
+                        usersHTML += "<div class='col-sm-4' align='left'> <p style='align:left; color:2d2d2d; font-weight: 600;'>"
+                                    + "<img src='" + singleUser.val().photo.photoUrl + "' id='userIMG' style='height:30px; width:30px; border-radius:50%;margin-right:7px; margin-right:7px'>" + singleUser.val().firstName + " "  + singleUser.val().secondName
+                                    + "</p> </div>";
+
+                        usersHTML += "</div>";  
+
+                        
+                        usersHTML += "<div align='left'><i style='font-size:15px; margin-left:3px ; color: #4885ed' class='fa'>&#xf2c1;</i><font size=2 style='color:#2e2e2e; margin-left:7px; margin-right:7px; font-weight:600'>" + "" + singleUser.val().bio + "</font></div>";
+                      usersHTML+="<hr>"
+
+                });
+                
+                
+                $("#blogs").html(usersHTML);
+
+            }
+        });
+
+    </script>
+
