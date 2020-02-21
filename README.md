@@ -7,6 +7,6 @@ Use XAMPP Server or Do following steps
 1. Open CMD/Node.JS and run command -> " npm install http-server "
    & also make sure Node.JS is installed in your device
 
-# Make sure the *design_files.zip* must be extracted into main folder i.e. FireStorm - Social Media Platform.
+# Make sure the *design_files.rar* must be extracted into main folder i.e. FireStorm - Social Media Platform.
 
 # * LIVE DEMO : https://firestorm-f6930.web.app ( FireeStorm ) * 
